@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="user-scalable=no,width=device-width" />
+<link href="buttons.css" rel="stylesheet">
+<link href="list.css" rel="stylesheet">
+<link href="input.css" rel="stylesheet">
+<style>
+body, html {border: 0px; margin: 0px; padding: 0px; 
+height:100%; position:relative; width:100%;}
+.hidden{display:none;}
+td{width:25%}
+table{width:100%;}
+.action{background-color:#ddd;}
+input{text-align:right;}
+</style>
+</head>
+<body>
+<div id="menu" class="">
+<table>
+<tr>
+<td colspan="4">
+<form oninput="document.getElementById('y1').innerHTML=evalf(x.value)" method="post" name="fLookup"  onSubmit="return Calc(x);">
+<input  oncontextmenu="clrf()" type="text"  autocomplete="off" name="x" id="x" placeholder="0"/> <!--<input type="submit" value="calc" />-->
+</form>
+</td>
+</tr>
+<tr>
+<td><button id="xxm" onclick="if(!xx) {xx=evalf(x.value);this.className='action';} else addvl(xx);">M</button></td>
+<td><button onclick="clrf()">C</button></td>
+<td colspan="2"><button name="y1" id="y1" onclick="Calc(document.getElementById('x'))" class="action">=</button></td>
+</tr>
+<tr>
+<td><button name="7" onclick="addvl(this.name)">7</button></td>
+<td><button name="8" onclick="addvl(this.name)">8</button></td>
+<td><button name="9" onclick="addvl(this.name)">9</button></td>
+<td><button name="/" onclick="addvl(this.name)">/</button></td>
+</tr>
+<tr>
+<td><button name="4" onclick="addvl(this.name)">4</button></td>
+<td><button name="5" onclick="addvl(this.name)">5</button></td>
+<td><button name="6" onclick="addvl(this.name)">6</button></td>
+<td><button name="*" onclick="addvl(this.name)">*</button></td>
+</tr><tr>
+<td><button name="1" onclick="addvl(this.name)">1</button></td>
+<td><button name="2" onclick="addvl(this.name)">2</button></td>
+<td><button name="3" onclick="addvl(this.name)">3</button></td>
+<td><button name="-" onclick="addvl(this.name)">-</button></td>
+</tr><tr>
+<td><button name="0" onclick="addvl(this.name)">0</button></td>
+<td><button name="." onclick="addvl(this.name)">.</button></td>
+<td><button name="sqrt(" onclick="addvl(this.name)">&#8730;</button></td>
+<td><button name="+" onclick="addvl(this.name)">+</button></td>
+</tr>
+<tr>
+<td><button onclick="showlinks();">&#9776;</button></td>
+<td><button name="(" onclick="addvl(this.name)">(</button></td>
+<td><button name=")" onclick="addvl(this.name)">)</button></td>
+<td><button onclick="delf()">&#8592;</button></td>
+</tr>
+</table>
+</div>
+<div id="list" class="hidden">
+<table><tr><td><button onclick="back();">back</button></td><td>
+<button onclick="xxc=1;clrf();document.getElementById('y').innerHTML='';i=0;localStorage.clear();back();">clear</button></td></tr></table>
+<ul data-type="list" id='y'></ul>
+</div>
+<script>
+var xx=0;
+var xxc=0;
+function pow(n, p)
+{
+    return Math.pow(n,p);
+}
+function toDegrees (angle) {
+  return angle * (180 / Math.PI);
+}
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+function sin(n)
+{
+    return Math.sin(toRadians(n));
+}
+function cos(n)
+{
+    return Math.cos(toRadians(n));
+}
+function tan(n)
+{
+    return Math.tan(toRadians(n));
+}
+
+function sqrt(n)
+{
+    return Math.sqrt(n);
+}
+var data=[];
+var res=[];
+var i=0;
+
+function isBigEnough(element, index, array) {
+  return (element >= 10);
+}
+
+setvl = function(x1,yy){
+document.getElementById('x').value=x1;
+document.getElementById('y1').innerHTML = yy;
+document.getElementById('x').focus();
+}
+
+addvl = function(x){
+document.getElementById('x').value+=x;
+var elem=document.getElementById('x');
+var len = elem.value.length;
+    elem.setSelectionRange(len, len);
+
+document.getElementById('y1').innerHTML=evalf(document.getElementById('x').value);
+}
+
+function evalf(x){
+xxc=0;
+if (!x) return 0;
+else{
+var t=0;
+try{
+return eval(x);
+}
+catch(err){
+t=1;}
+if(t!=1) return eval(x);
+else return 0;
+}
+}
+
+delf = function(){
+var x=document.getElementById('x').value.slice(0,-1);
+document.getElementById('x').value=x;
+document.getElementById('y1').innerHTML=evalf(x);
+}
+
+clrf = function(){
+document.getElementById('x').value='';
+document.getElementById('y1').innerHTML='0';
+if (xxc==0) xxc=1;
+else {xx=0;xxc=0;
+document.getElementById('xxm').className='';}
+}
+
+Calc=function(x){
+if(localStorage.getItem('t')) localStorage.setItem('t',localStorage.getItem('t')+"::"+x.value+":"+evalf(x.value));
+else localStorage.setItem('t',x.value+":"+evalf(x.value));
+data[i]=x.value;
+res[i]=evalf(x.value);
+//if(i>1) console.log(data[i-2]+" "+data[i-1]);
+document.getElementById('y').innerHTML += '<li><a href="#" onclick="setvl(data['+i+'],res['+i+']);back();">'+x.value+" = "+res[i]+'</a>'+"</li>";
+x.value=res[i];
+//if(i>2) document.getElementById('y').innerHTML += data.filter(isBigEnough) +"<br>";
+//document.getElementById('y').innerHTML += data[i,0] +"<br>";
+i+=1;
+return false;
+}
+
+function showlinks(){
+document.getElementById('menu').className ="hidden";
+document.getElementById('list').className ="";
+}
+function back(){
+document.getElementById('menu').className ="";
+document.getElementById('list').className ="hidden";
+}
+
+if(localStorage.getItem('t')) {
+for (var j=0;j<localStorage.getItem('t').split('::').length;j++)
+{
+data[i]=localStorage.getItem('t').split('::')[j].split(':')[0];
+res[i]=localStorage.getItem('t').split('::')[j].split(':')[1];
+document.getElementById('y').innerHTML += '<li><a href="#" onclick="setvl(data['+i+'],res['+i+']);back();">'+data[i]+" = "+res[i]+'</a>'+"</li>";
+i+=1;
+}
+}
+</script>
+</body>
+</html>
