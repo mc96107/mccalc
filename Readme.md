@@ -1,5 +1,6 @@
-mccalc is a simple calculator
-features:  
+mccalc is a simple calculator.  
+
+Features:  
 
 * history support (stored offline)
 * View result as you type!
