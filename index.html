@@ -40,7 +40,7 @@ input{text-align:right;}
 <td><button name="4" onclick="addvl(this.name)">4</button></td>
 <td><button name="5" onclick="addvl(this.name)">5</button></td>
 <td><button name="6" onclick="addvl(this.name)">6</button></td>
-<td><button name="*" onclick="addvl(this.name)">*</button></td>
+<td><button name="*" onclick="addvl(this.name)">x</button></td>
 </tr><tr>
 <td><button name="1" onclick="addvl(this.name)">1</button></td>
 <td><button name="2" onclick="addvl(this.name)">2</button></td>
@@ -49,7 +49,7 @@ input{text-align:right;}
 </tr><tr>
 <td><button name="0" onclick="addvl(this.name)">0</button></td>
 <td><button name="." onclick="addvl(this.name)">.</button></td>
-<td><button name="sqrt(" onclick="addvl(this.name)">&#8730;</button></td>
+<td><button name="%" onclick="addvl(this.name)">%</button></td>
 <td><button name="+" onclick="addvl(this.name)">+</button></td>
 </tr>
 <tr>
@@ -119,6 +119,7 @@ document.getElementById('y1').innerHTML=evalf(document.getElementById('x').value
 }
 
 function evalf(x){
+x = percent(x);
 xxc=0;
 if (!x) return 0;
 else{
@@ -179,6 +180,49 @@ document.getElementById('y').innerHTML += '<li><a href="#" onclick="setvl(data['
 i+=1;
 }
 }
+
+function percent(x){
+//var rex=/((?:([\/\*\+-])(?!.*[\/\*\+-])).*$)/g;
+var rex=/((?:([\+-])(?!.*[\+-])).*$)/g;
+var y="";
+if(x.split("%").length>1){
+for (var i=0;i<x.split("%").length;i++) {
+if (x.split("%")[i].length){
+if(i==x.split("%").length-1) y = y + x.split("%")[i];
+else {
+    if(x.split("%")[i].match(rex)) {
+        var yt=x.split("%")[i].match(rex)[0]; 
+        if (x.split("%")[i].split(rex)[0].match(rex))
+            y=y
+                +x.split("%")[i].split(rex)[0]
+                //+ x.split("%")[i].split(rex)[0].match(rex)[0][0]
+               // + x.split("%")[i].split(rex)[0].match(rex)[0].substring(1)
+                +yt[0]
+                +yt.substring(1)
+                + "*"
+                + x.split("%")[i].split(rex)[0].match(rex)[0].substring(1) 
+                + "/100";
+
+        else if(x.split("%")[i].split(rex)[0].length)
+            y=y
+                +x.split("%")[i].split(rex)[0]
+                +yt[0]
+                +yt.substring(1)
+                + "*"
+                + x.split("%")[i].split(rex)[0]
+                + "/100";
+                
+               
+        else y = y + x.split("%")[i] + "/100";  
+        } else y = y + x.split("%")[i] + "/100";        
+    }
+   }
+ } 
+} else y = x;
+console.log(y); 
+return y;
+}
+
 </script>
 </body>
 </html>
