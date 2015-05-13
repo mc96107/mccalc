@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "com.mc96107.mccalco"
+        versionCode = "1" 
+        version     = "0.0.1" >
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>mccalco</name>
+
+    <description>
+        MC Calculator
+    </description>
+
+    <author href="https://dl.dropboxusercontent.com/u/1701141/site.html" email="mc96107+mccalcandroid@gmail.com">
+        Dimitris Gardiklis
+    </author>
+<icon src="icon128.png" />
+</widget>
